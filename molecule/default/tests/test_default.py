@@ -12,6 +12,9 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_certbot_is_installed(host):
     assert host.package('certbot').is_installed
 
+def test_cron_is_installed(host):
+    assert host.package('cron').is_installed
+
 def test_cerbot_is_working(host):
     command = host.run("certbot --version")
     assert command.rc == 0
