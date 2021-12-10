@@ -1,0 +1,18 @@
+---
+- name: Gather OS specific variables
+  include_vars: "{{ loop_vars }}"
+  loop: "{{ query('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distro }}-{{ ansible_distro_version }}.yml"
+        - "{{ ansible_distro }}-{{ ansible_distro_release }}.yml"
+        - "{{ ansible_distro }}-{{ ansible_distro_major_version }}.yml"
+        - "{{ ansible_distro }}.yml"
+        - "{{ ansible_os_family|lower }}-family.yml"
+        - "{{ ansible_system | lower }}.yml"
+      paths:
+        - "vars"
+      skip: true
+  loop_control:
+    loop_var: loop_vars
