@@ -1,3 +1,5 @@
 ---
 - name: Install Certbot from repository
-  package: "name=certbot state=present"
+  package:
+    name: "{{ certbot_package }}"
+    state: "present"
