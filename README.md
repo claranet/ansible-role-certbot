@@ -25,7 +25,16 @@ ansible-galaxy install claranet.certbot
 
 Variable | Default value | Description
 ---------|---------------|------------
-null     | **null**      | null       
+certbot_package           | **certbot**                        | Package name
+certbot_webroot           | **/var/www/letsencrypt**           | Directory for http challenges
+certbot_auto_renew        | **true**                           | Enable certificate renew
+certbot_auto_renew_user   | **root**                           | User to configure certificate renew
+certbot_auto_renew_hour   | **3**                              | Cron job hour for renew
+certbot_auto_renew_minute | **30**                             | Cron job minutes for renew
+certbot_auto_renew_option | **--quiet --no-self-upgrade**      | Options for renew command
+certbot_certs             | **[]**                             | See defaults/main.yml for details
+certbot_staging_enabled   | **true**                           | Use letsencrypt staging
+certbot_create_command    | **certbot certonly --webroot ...** | See defaults/main.yml for details
 
 ## :arrows_counterclockwise: Dependencies
 
