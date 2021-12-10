@@ -16,3 +16,6 @@
       skip: true
   loop_control:
     loop_var: loop_vars
+
+- include_tasks: install-certbot.yml
+  tags: certbot_install
