@@ -27,15 +27,3 @@
 
 - import_tasks: renew-cron.yml
   when: certbot_auto_renew
-
-- name: Set fact for apache reload
-  set_fact:
-    certbot_reload_apache: true
-
-- name: reload_message
-  debug:
-    msg:
-      - "****"
-      - "**** !!! MANUAL RELOAD NEEDED !!!"
-      - "**** Configuration files changed, you have to reload apache manually"
-      - "****"

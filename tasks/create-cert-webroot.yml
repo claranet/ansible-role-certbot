@@ -13,4 +13,16 @@
 
 - name: Generate new certificate if one doesn't exist.
   command: "{{ certbot_create_command }}"
+  register: generate_certificate
   when: not letsencrypt_cert.stat.exists
+
+- name: Print reload message
+  debug:
+    msg:
+      - "****"
+      - "**** !!! MANUAL RELOAD NEEDED !!!"
+      - "**** Configuration files changed, you have to:"
+      - "**** 1. update your webserver configuration"
+      - "**** 2. and reload it"
+      - "****"
+  when: generate_certificate.changed
