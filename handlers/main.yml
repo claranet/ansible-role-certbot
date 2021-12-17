@@ -1,8 +1,9 @@
-- name: restart_message
+---
+- name: reload_message
   debug:
     msg:
       - "****"
       - "**** !!! MANUAL RELOAD NEEDED !!!"
       - "**** Configuration files changed, you have to reload apache manually"
       - "****"
-  when: certbot_reload_apache
+  when: not certbot_reload_apache
