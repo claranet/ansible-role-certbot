@@ -27,3 +27,7 @@
 
 - import_tasks: renew-cron.yml
   when: certbot_auto_renew
+
+- name: Set fact for apache reload
+  set_fact:
+    certbot_reload_apache: true
