@@ -28,5 +28,5 @@ certbot_create_command: >-
   {{ '--staging' if certbot_staging_enabled else '' }}
   --noninteractive --agree-tos
   --email {{ cert_item.email | default(certbot_admin_email) }}
-  --webroot-path {{ cert_item.webroot }}
+  --webroot-path "{{ cert_item.webroot | default(certbot_webroot) }}"
   -d {{ cert_item.domains | join(',') }}
