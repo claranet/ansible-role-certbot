@@ -29,4 +29,5 @@ certbot_create_command: >-
   --noninteractive --agree-tos
   --email {{ cert_item.email | default(certbot_admin_email) }}
   --webroot-path "{{ cert_item.webroot | default(certbot_webroot) }}"
+  --expand
   -d {{ cert_item.domains | join(',') }}
