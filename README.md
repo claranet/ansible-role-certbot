@@ -15,6 +15,29 @@ Install and manage certbot
 
 Ansible >= 2.10
 
+### Webserver Setup
+
+Before configuring certbot to issue a certificate, you must setup your webserver in order to handle certbot http challenges.
+
+#### Apache2
+
+```bash
+Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
+<Directory "/var/www/letsencrypt">
+    AllowOverride None
+    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+    Require all granted
+</Directory>
+```
+
+#### Nginx
+
+```
+location /.well-known/acme-challenge/ {
+    root /var/www/letsencrypt/.well-known/acme-challenge/;
+}
+```
+
 ## :zap: Installation
 
 ```bash
