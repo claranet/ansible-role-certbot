@@ -1,0 +1,6 @@
+---
+- name: reload services
+  service:
+    name: "{{ item }}"
+    state: reloaded
+  loop: "{{ certbot_reload_services }}"

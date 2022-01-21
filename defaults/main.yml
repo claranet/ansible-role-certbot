@@ -34,3 +34,7 @@ certbot_create_command: >-
   -d {{ cert_item.domains | join(',') }}
 
 certbot_plugins: []
+
+certbot_reload_services_before_enabled: true
+certbot_reload_services_after_enabled: true
+certbot_reload_services: []
