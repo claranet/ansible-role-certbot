@@ -14,7 +14,7 @@
 - name: Generate new certificate if one doesn't exist.
   command: "{{ certbot_create_command }}"
   register: generate_certificate
-  when: not letsencrypt_cert.stat.exists
+  #when: not letsencrypt_cert.stat.exists
 
 - name: Print reload message
   debug:
