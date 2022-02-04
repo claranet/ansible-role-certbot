@@ -11,13 +11,14 @@
     group: www-data
     mode: 0750
 
-- name: Sleep for 120 seconds and continue with play
-  wait_for:
-    timeout: "{{ 120 |random(seed=inventory_hostname) }}"
+#- name: Sleep for 120 seconds and continue with play
+#  wait_for:
+#    timeout: "{{ 120 |random(seed=inventory_hostname) }}"
 
 - name: Generate new certificate if one doesn't exist.
   command: "{{ certbot_create_command }}"
   register: generate_certificate
+  throttle: 1
   #when: not letsencrypt_cert.stat.exists
 
 - name: Print reload message
