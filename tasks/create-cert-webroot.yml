@@ -15,7 +15,6 @@
   command: "{{ certbot_create_command }}"
   register: generate_certificate
   throttle: 1
-  #when: not letsencrypt_cert.stat.exists
 
 - name: Print reload message
   debug:
