@@ -70,5 +70,7 @@ warn_list:
 
 skip_list:
   - role-name  # BUG
+  - no-changed-when
+  - no-handler
 
 verbosity: 1
