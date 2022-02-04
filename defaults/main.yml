@@ -1,6 +1,8 @@
 ---
 # defaults file for role
-certbot_package: "certbot"
+certbot_packages:
+  - certbot
+  - python3-pip
 
 # Default webroot, overwritten by individual per-cert webroot directories
 certbot_webroot: /var/www/letsencrypt

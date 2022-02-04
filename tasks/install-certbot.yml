@@ -1,8 +1,9 @@
 ---
-- name: Install Certbot from repository
+- name: Install Certbot from repository and related packages
   package:
-    name: "{{ certbot_package }}"
+    name: "{{ item }}"
     state: "present"
+  loop: "{{ certbot_packages }}"
 
 - name: Install Certbot plugin
   pip:
