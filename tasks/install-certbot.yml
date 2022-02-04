@@ -4,5 +4,10 @@
     name: "{{ certbot_package }}"
     state: "present"
 
+- name: Install Certbot plugin
+  pip:
+    name: "{{ item }}"
+  loop: "{{ certbot_plugins }}"
+
 - name: Install cron
   apt: name=cron state=present

@@ -32,3 +32,5 @@ certbot_create_command: >-
   --cert-name "{{ cert_item.domains | first }}"
   --expand
   -d {{ cert_item.domains | join(',') }}
+
+certbot_plugins: []
