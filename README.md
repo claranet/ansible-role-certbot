@@ -15,6 +15,10 @@ Install and manage certbot
 
 Ansible >= 2.10
 
+## HTTP-01 Challenge
+
+Before using this challenge type, your server must have a public IP and a DNS record zone pointing to it.
+
 ### Webserver Setup
 
 Before configuring certbot to issue a certificate, you must setup your webserver in order to handle certbot http challenges.
@@ -38,6 +42,10 @@ location /.well-known/acme-challenge/ {
 }
 ```
 
+## DNS-01 Challenge
+
+TODO
+
 ## :zap: Installation
 
 ```bash
@@ -48,16 +56,20 @@ ansible-galaxy install claranet.certbot
 
 Variable | Default value | Description
 ---------|---------------|------------
-certbot_package           | **certbot**                        | Package name
-certbot_webroot           | **/var/www/letsencrypt**           | Directory for http challenges
-certbot_auto_renew        | **true**                           | Enable certificate renew
-certbot_auto_renew_user   | **root**                           | User to configure certificate renew
-certbot_auto_renew_hour   | **3**                              | Cron job hour for renew
-certbot_auto_renew_minute | **30**                             | Cron job minutes for renew
-certbot_auto_renew_option | **--quiet --no-self-upgrade**      | Options for renew command
-certbot_certs             | **[]**                             | See defaults/main.yml for details
-certbot_staging_enabled   | **true**                           | Use letsencrypt staging
-certbot_create_command    | **certbot certonly --webroot ...** | See defaults/main.yml for details
+certbot_packages                          | **['certbot', 'python3-pip']**     | Package name
+certbot_webroot                           | **/var/www/letsencrypt**           | Directory for http challenges
+certbot_auto_renew                        | **true**                           | Enable certificate renew
+certbot_auto_renew_user                   | **root**                           | User to configure certificate renew
+certbot_auto_renew_hour                   | **3**                              | Cron job hour for renew
+certbot_auto_renew_minute                 | **30**                             | Cron job minutes for renew
+certbot_auto_renew_option                 | **--quiet --no-self-upgrade**      | Options for renew command
+certbot_certs                             | **[]**                             | See defaults/main.yml for details
+certbot_staging_enabled                   | **true**                           | Use letsencrypt staging
+certbot_create_command                    | **certbot certonly --webroot ...** | See defaults/main.yml for details
+certbot_plugins                           | **[]**                             | List of plugins to install using pip
+certbot_reload_services_before_enabled    | **true**                           | Reload `certbot_reload_services` before configuring certbot
+certbot_reload_services_after_enabled     | **true**                           | Reload `certbot_reload_services` after configuring certbot
+certbot_reload_services                   | **[]**                             | List of services to reload
 
 ## :arrows_counterclockwise: Dependencies
 
