@@ -46,7 +46,7 @@ N/A
 
 ## HTTP-01 Challenge
 
-!! To use HTTP-01 challenge, you have to only use webroot plugin (default behavior)
+:warning: To use HTTP-01 challenge, you have to only use webroot plugin (default behavior)
 
 Before using this challenge type, your server must have a public IP and a DNS record zone pointing to it.
 
@@ -73,7 +73,7 @@ certbot_certs:
         - "lamp-01.clara.net"
         - "lamp-02.clara.net"
 certbot_reload_services:
-    - apache
+    - apache2
 ```
 
 #### Nginx
@@ -97,7 +97,7 @@ certbot_reload_services:
 
 ## DNS-01 Challenge
 
-!! For wildcard certificate, you have to use `--cert-name` option like this to avoid creating a new certificate for each ansible run :
+:warning: For wildcard certificate, you have to use `--cert-name` option like this to avoid creating a new certificate for each ansible run :
 
 ```
 --cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$'
