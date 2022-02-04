@@ -15,37 +15,6 @@ Install and manage certbot
 
 Ansible >= 2.10
 
-## HTTP-01 Challenge
-
-Before using this challenge type, your server must have a public IP and a DNS record zone pointing to it.
-
-### Webserver Setup
-
-Before configuring certbot to issue a certificate, you must setup your webserver in order to handle certbot http challenges.
-
-#### Apache2
-
-```bash
-Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
-<Directory "/var/www/letsencrypt">
-    AllowOverride None
-    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
-    Require all granted
-</Directory>
-```
-
-#### Nginx
-
-```
-location /.well-known/acme-challenge/ {
-    root /var/www/letsencrypt/.well-known/acme-challenge/;
-}
-```
-
-## DNS-01 Challenge
-
-TODO
-
 ## :zap: Installation
 
 ```bash
@@ -74,6 +43,93 @@ certbot_reload_services                   | **[]**                             |
 ## :arrows_counterclockwise: Dependencies
 
 N/A
+
+## HTTP-01 Challenge
+
+!! To use HTTP-01 challenge, you have to only use webroot plugin (default behavior)
+
+Before using this challenge type, your server must have a public IP and a DNS record zone pointing to it.
+
+### Webserver Setup
+
+Before configuring certbot to issue a certificate, you must setup your webserver in order to handle certbot http challenges.
+
+#### Apache2
+
+```bash
+Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challenge/"
+<Directory "/var/www/letsencrypt">
+    AllowOverride None
+    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+    Require all granted
+</Directory>
+```
+
+```yaml
+certbot_certs:
+    - email: "test@clara.net"
+        certbot_webroot: "/var/www/letsencrypt"
+        domains:
+        - "lamp-01.clara.net"
+        - "lamp-02.clara.net"
+certbot_reload_services:
+    - apache
+```
+
+#### Nginx
+
+```
+location /.well-known/acme-challenge/ {
+    root /var/www/letsencrypt/.well-known/acme-challenge/;
+}
+```
+
+```yaml
+certbot_certs:
+    - email: "test@clara.net"
+        certbot_webroot: "/var/www/letsencrypt"
+        domains:
+        - "lamp-01.clara.net"
+        - "lamp-02.clara.net"
+certbot_reload_services:
+    - nginx
+```
+
+## DNS-01 Challenge
+
+!! For wildcard certificate, you have to use `--cert-name` option like this to avoid creating a new certificate for each ansible run :
+
+```
+--cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$'
+```
+
+### Route53 example
+
+```yaml
+certbot_certs:
+- email: "test@clara.net"
+    domains:
+    - "*.molecule.clara.net"
+- email: "test@clara.net"
+    domains:
+    - "lamp-01.clara.net"
+    - "lamp-02.clara.net"
+
+certbot_reload_services:
+    - nginx
+
+certbot_create_command: >-
+    certbot certonly --dns-route53
+    {{ '--staging --break-my-certs' if certbot_staging_enabled else '' }}
+    --noninteractive --agree-tos
+    --email {{ cert_item.email | default(certbot_admin_email) }}
+    --cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
+    --expand
+    -d {{ cert_item.domains | join(',') }}
+
+certbot_plugins:
+    - certbot-dns-route53==1.22.0
+```
 
 ## :pencil2: Example Playbook
 
