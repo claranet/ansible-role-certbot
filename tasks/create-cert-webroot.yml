@@ -12,7 +12,7 @@
 
 - name: Generate new certificate if one doesn't exist, one host at a time
   command: "{{ certbot_create_command }}"
-  register: generate_certificate
+  register: _certbot_generate_certificate
   throttle: 1
 
 - name: Print reload message
@@ -26,4 +26,4 @@
       - "**** 1.2. private key in /etc/letsencrypt/live/{{ cert_item.domains | first }}/privkey.pem"
       - "**** 2. and reload it"
       - "****"
-  when: generate_certificate.changed
+  when: _certbot_generate_certificate.changed
