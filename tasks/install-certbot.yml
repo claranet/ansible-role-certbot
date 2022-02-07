@@ -9,4 +9,6 @@
     name: "{{ certbot_plugins }}"
 
 - name: Install cron
-  apt: name=cron state=present
+  package:
+    name: cron
+    state: present
