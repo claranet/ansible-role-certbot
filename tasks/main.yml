@@ -11,7 +11,7 @@
 - include_tasks: create-cert-webroot.yml
   with_items: "{{ certbot_certs }}"
   loop_control:
-    loop_var: cert_item
+    loop_var: _certbot_cert_item
 
 - import_tasks: renew-cron.yml
   when: certbot_auto_renew

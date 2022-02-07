@@ -30,11 +30,11 @@ certbot_create_command: >-
   certbot certonly --webroot
   {{ '--staging' if certbot_staging_enabled else '' }}
   --noninteractive --agree-tos
-  --email {{ cert_item.email | default(certbot_admin_email) }}
-  --webroot-path "{{ cert_item.webroot | default(certbot_webroot) }}"
-  --cert-name "{{ cert_item.domains | first }}"
+  --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
+  --webroot-path "{{ _certbot_cert_item.webroot | default(certbot_webroot) }}"
+  --cert-name "{{ _certbot_cert_item.domains | first }}"
   --expand
-  -d {{ cert_item.domains | join(',') }}
+  -d {{ _certbot_cert_item.domains | join(',') }}
 
 certbot_plugins: []
 
