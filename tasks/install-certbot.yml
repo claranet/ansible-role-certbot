@@ -1,14 +1,12 @@
 ---
 - name: Install Certbot from repository and related packages
   package:
-    name: "{{ item }}"
+    name: "{{ certbot_packages }}"
     state: "present"
-  loop: "{{ certbot_packages }}"
 
 - name: Install Certbot plugin
   pip:
-    name: "{{ item }}"
-  loop: "{{ certbot_plugins }}"
+    name: "{{ certbot_plugins }}"
 
 - name: Install cron
   apt: name=cron state=present
