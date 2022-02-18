@@ -1,0 +1,23 @@
+---
+- name: reload services before certbot tasks
+  include_tasks: reload-services.yml
+  when:
+    - certbot_reload_services | length > 0
+    - certbot_reload_services_before_enabled
+
+- include_tasks: install-certbot.yml
+  tags: certbot_install
+
+- include_tasks: create-cert-webroot.yml
+  with_items: "{{ certbot_certs }}"
+  loop_control:
+    loop_var: _certbot_cert_item
+
+- import_tasks: renew-cron.yml
+  when: certbot_auto_renew
+
+- name: reload services after certbot tasks
+  include_tasks: reload-services.yml
+  when:
+    - certbot_reload_services | length > 0
+    - certbot_reload_services_after_enabled

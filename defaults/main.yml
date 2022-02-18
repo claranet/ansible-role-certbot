@@ -1,0 +1,43 @@
+---
+# defaults file for role
+certbot_packages:
+  - certbot
+  - python3-pip
+
+# Default webroot, overwritten by individual per-cert webroot directories
+certbot_webroot: /var/www/letsencrypt
+
+# Certbot auto renew
+certbot_auto_renew: true
+certbot_auto_renew_user: "root"
+certbot_auto_renew_hour: "3"
+# To avoid certificate renew on all hosts at the same time
+certbot_auto_renew_minute: "{{ 59 |random(seed=inventory_hostname) }}"
+certbot_auto_renew_options: "--quiet --no-self-upgrade"
+
+certbot_certs: []
+# - email: janedoe@example.com
+#   webroot: "/var/www/html/"
+#   domains:
+#     - example1.com
+#     - example2.com
+# - domains:
+#     - example3.com
+
+certbot_staging_enabled: true
+
+certbot_create_command: >-
+  certbot certonly --webroot
+  {{ '--staging' if certbot_staging_enabled else '' }}
+  --noninteractive --agree-tos
+  --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
+  --webroot-path "{{ _certbot_cert_item.webroot | default(certbot_webroot) }}"
+  --cert-name "{{ _certbot_cert_item.domains | first }}"
+  --expand
+  -d {{ _certbot_cert_item.domains | join(',') }}
+
+certbot_plugins: []
+
+certbot_reload_services_before_enabled: true
+certbot_reload_services_after_enabled: true
+certbot_reload_services: []
