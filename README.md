@@ -36,6 +36,7 @@ certbot_certs                             | **[]**                             |
 certbot_staging_enabled                   | **true**                           | Use letsencrypt staging
 certbot_create_command                    | **certbot certonly --webroot ...** | See defaults/main.yml for details
 certbot_plugins                           | **[]**                             | List of plugins to install using pip
+certbot_plugins_pip_executable            | **pip3**                           | pip executable to use to install certbot plugins
 certbot_reload_services_before_enabled    | **true**                           | Reload `certbot_reload_services` before configuring certbot
 certbot_reload_services_after_enabled     | **true**                           | Reload `certbot_reload_services` after configuring certbot
 certbot_reload_services                   | **[]**                             | List of services to reload
