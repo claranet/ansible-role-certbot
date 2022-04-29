@@ -8,8 +8,8 @@
 - include_tasks: install-certbot.yml
   tags: certbot_install
 
-- include_tasks: create-cert-webroot.yml
-  with_items: "{{ certbot_certs }}"
+- include_tasks: create-cert.yml
+  loop: "{{ certbot_certs }}"
   loop_control:
     loop_var: _certbot_cert_item
 

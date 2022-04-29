@@ -9,6 +9,7 @@
     state: directory
     group: www-data
     mode: 0750
+  when: (_certbot_cert_item.webroot | default(certbot_webroot)) is not none
 
 - name: Generate new certificate if one doesn't exist, one host at a time
   command: "{{ certbot_create_command }}"

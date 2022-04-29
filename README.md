@@ -36,6 +36,7 @@ certbot_certs                             | **[]**                             |
 certbot_staging_enabled                   | **true**                           | Use letsencrypt staging
 certbot_create_command                    | **certbot certonly --webroot ...** | See defaults/main.yml for details
 certbot_plugins                           | **[]**                             | List of plugins to install using pip
+certbot_plugins_pip_executable            | **pip3**                           | pip executable to use to install certbot plugins
 certbot_reload_services_before_enabled    | **true**                           | Reload `certbot_reload_services` before configuring certbot
 certbot_reload_services_after_enabled     | **true**                           | Reload `certbot_reload_services` after configuring certbot
 certbot_reload_services                   | **[]**                             | List of services to reload
@@ -100,7 +101,7 @@ certbot_reload_services:
 :warning: For wildcard certificate, you have to use `--cert-name` option like this to avoid creating a new certificate for each ansible run :
 
 ```
---cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$'
+--cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$'
 ```
 
 ### Route53 example
@@ -122,10 +123,10 @@ certbot_create_command: >-
     certbot certonly --dns-route53
     {{ '--staging --break-my-certs' if certbot_staging_enabled else '' }}
     --noninteractive --agree-tos
-    --email {{ cert_item.email | default(certbot_admin_email) }}
-    --cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
+    --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
+    --cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
     --expand
-    -d {{ cert_item.domains | join(',') }}
+    -d {{ _certbot_cert_item.domains | join(',') }}
 
 certbot_plugins:
     - certbot-dns-route53==1.22.0
