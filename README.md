@@ -101,7 +101,7 @@ certbot_reload_services:
 :warning: For wildcard certificate, you have to use `--cert-name` option like this to avoid creating a new certificate for each ansible run :
 
 ```
---cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$'
+--cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$'
 ```
 
 ### Route53 example
@@ -123,10 +123,10 @@ certbot_create_command: >-
     certbot certonly --dns-route53
     {{ '--staging --break-my-certs' if certbot_staging_enabled else '' }}
     --noninteractive --agree-tos
-    --email {{ cert_item.email | default(certbot_admin_email) }}
-    --cert-name "{{ cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
+    --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
+    --cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
     --expand
-    -d {{ cert_item.domains | join(',') }}
+    -d {{ _certbot_cert_item.domains | join(',') }}
 
 certbot_plugins:
     - certbot-dns-route53==1.22.0
