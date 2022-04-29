@@ -23,7 +23,7 @@
       - "**** !!! MANUAL RELOAD NEEDED !!!"
       - "**** Configuration files changed, you have to..."
       - "**** 1. update your webserver configuration to use:"
-      - "**** 1.1. certificate in /etc/letsencrypt/live/{{ _certbot_cert_item.domains | first }}/cert.pem"
+      - "**** 1.1. certificate in /etc/letsencrypt/live/{{ _certbot_cert_item.domains | first }}/fullchain.pem"
       - "**** 1.2. private key in /etc/letsencrypt/live/{{ _certbot_cert_item.domains | first }}/privkey.pem"
       - "**** 2. and reload it"
       - "****"
