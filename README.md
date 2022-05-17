@@ -68,32 +68,32 @@ Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challe
 
 ```yaml
 certbot_certs:
-    - email: "test@clara.net"
-        certbot_webroot: "/var/www/letsencrypt"
-        domains:
-        - "lamp-01.clara.net"
-        - "lamp-02.clara.net"
+  - email: "test@clara.net"
+    certbot_webroot: "/var/www/letsencrypt"
+    domains:
+      - "lamp-01.clara.net"
+      - "lamp-02.clara.net"
 certbot_reload_services:
-    - apache2
+  - apache2
 ```
 
 #### Nginx
 
 ```
 location /.well-known/acme-challenge/ {
-    root /var/www/letsencrypt/.well-known/acme-challenge/;
+    alias /var/www/letsencrypt/.well-known/acme-challenge/;
 }
 ```
 
 ```yaml
 certbot_certs:
-    - email: "test@clara.net"
-        certbot_webroot: "/var/www/letsencrypt"
-        domains:
-        - "lamp-01.clara.net"
-        - "lamp-02.clara.net"
+  - email: "test@clara.net"
+    certbot_webroot: "/var/www/letsencrypt"
+    domains:
+      - "lamp-01.clara.net"
+      - "lamp-02.clara.net"
 certbot_reload_services:
-    - nginx
+  - nginx
 ```
 
 ## DNS-01 Challenge
@@ -109,27 +109,27 @@ certbot_reload_services:
 ```yaml
 certbot_certs:
 - email: "test@clara.net"
-    domains:
+  domains:
     - "*.molecule.clara.net"
 - email: "test@clara.net"
-    domains:
+  domains:
     - "lamp-01.clara.net"
     - "lamp-02.clara.net"
 
 certbot_reload_services:
-    - nginx
+  - nginx
 
 certbot_create_command: >-
-    certbot certonly --dns-route53
-    {{ '--staging --break-my-certs' if certbot_staging_enabled else '' }}
-    --noninteractive --agree-tos
-    --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
-    --cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
-    --expand
-    -d {{ _certbot_cert_item.domains | join(',') }}
+  certbot certonly --dns-route53
+  {{ '--staging --break-my-certs' if certbot_staging_enabled else '' }}
+  --noninteractive --agree-tos
+  --email {{ _certbot_cert_item.email | default(certbot_admin_email) }}
+  --cert-name "{{ _certbot_cert_item.domains | first | regex_replace('^\*\.(.*)$', 'wildcard.\1') }}"
+  --expand
+  -d {{ _certbot_cert_item.domains | join(',') }}
 
 certbot_plugins:
-    - certbot-dns-route53==1.22.0
+  - certbot-dns-route53==1.22.0
 ```
 
 ## :pencil2: Example Playbook
