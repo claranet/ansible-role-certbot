@@ -1,23 +1,26 @@
 ---
-- name: Check if certificate already exists.
-  stat:
+- name: "Check if certificate already exists."
+  ansible.builtin.stat:
     path: /etc/letsencrypt/live/{{ _certbot_cert_item.domains | first }}/cert.pem
+  register: _cerbot_certificate_file
 
-- name: Create webroot directory if it doesn't exist yet
-  file:
+- name: "Create webroot directory if it doesn't exist yet"
+  ansible.builtin.file:
     path: "{{ _certbot_cert_item.webroot | default(certbot_webroot) }}"
     state: directory
     group: www-data
     mode: 0750
   when: (_certbot_cert_item.webroot | default(certbot_webroot)) is not none
 
-- name: Generate new certificate if one doesn't exist, one host at a time
-  command: "{{ certbot_create_command }}"
+- name: "Generate new certificate if one doesn't exist, one host at a time"
+  ansible.builtin.command: "{{ certbot_create_command }}"
   register: _certbot_generate_certificate
   throttle: 1
+  changed_when: _certbot_generate_certificate.rc == 0
+  when: not _cerbot_certificate_file.stat.exists
 
-- name: Print reload message
-  debug:
+- name: "Print reload message"
+  ansible.builtin.debug:
     msg:
       - "****"
       - "**** !!! MANUAL RELOAD NEEDED !!!"
@@ -27,4 +30,7 @@
       - "**** 1.2. private key in /etc/letsencrypt/live/{{ _certbot_cert_item.domains | first }}/privkey.pem"
       - "**** 2. and reload it"
       - "****"
-  when: _certbot_generate_certificate.changed
+  when:
+    - not _cerbot_certificate_file.stat.exists
+    - _certbot_generate_certificate is defined
+    - _certbot_generate_certificate.rc == 0

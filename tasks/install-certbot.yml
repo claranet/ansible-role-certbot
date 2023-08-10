@@ -1,16 +1,17 @@
 ---
-- name: Install Certbot from repository and related packages
-  package:
+- name: "Install Certbot from repository and related packages"
+  ansible.builtin.package:
     name: "{{ certbot_packages + ['cron'] }}"
     state: present
 
-- name: systemctl disable --now certbot.timer
-  systemd:
+- name: "Systemctl disable --now certbot.timer"
+  ansible.builtin.systemd:
     name: certbot.timer
     enabled: false
     state: stopped
 
-- name: Install Certbot plugin
-  pip:
+- name: "Install Certbot plugin"
+  ansible.builtin.pip:
     name: "{{ certbot_plugins }}"
     executable: "{{ certbot_plugins_pip_executable }}"
+  when: certbot_plugins
