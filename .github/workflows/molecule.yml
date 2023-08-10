@@ -1,10 +1,10 @@
 ---
 name: Ansible Molecule
 
-on: # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
   push:
     tags_ignore:
-      - "*"
+      - '*'
   pull_request:
 
 jobs:
@@ -44,14 +44,16 @@ jobs:
         uses: ansible/ansible-lint-action@main
         with:
           path: "."
-
   test:
+    name: Scenario "${{ matrix.scenario }}" on ${{ matrix.config.image }}:${{ matrix.config.tag }}
     needs:
       - lint
+      - setup
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
+        scenario: ${{ fromJson(needs.setup.outputs.scenarios) }}
         config:
           - image: "debian"
             tag: "12"
