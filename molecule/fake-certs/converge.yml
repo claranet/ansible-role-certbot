@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    certbot_certs:
+      - email: delibesbechir@gmail.com
+        webroot: "/var/www/html/"
+        domains:
+          - fakedomain.com
+    certbot_create_command: |
+      mkdir -p /etc/letsencrypt/live/fakedomain.com/ && touch /etc/letsencrypt/live/fakedomain.com/cert.pem
+
+  roles:
+    - role: claranet.certbot
