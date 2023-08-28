@@ -1,23 +1,37 @@
 ---
-- name: reload services before certbot tasks
-  include_tasks: reload-services.yml
+- name: Reload services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: reloaded
+  loop: "{{ certbot_reload_services }}"
   when:
     - certbot_reload_services | length > 0
     - certbot_reload_services_before_enabled
 
-- include_tasks: install-certbot.yml
+- name: "Install certbot"
+  ansible.builtin.include_tasks: install-certbot.yml
   tags: certbot_install
 
-- include_tasks: create-cert.yml
+- name: "Create certificates with certbot"
+  ansible.builtin.include_tasks: create-cert.yml
   loop: "{{ certbot_certs }}"
   loop_control:
     loop_var: _certbot_cert_item
 
-- import_tasks: renew-cron.yml
+- name: "Add cron job for certbot renewal (if configured)."
+  ansible.builtin.cron:
+    name: Certbot automatic renewal.
+    job: "certbot renew {{ certbot_auto_renew_options }}"
+    minute: "{{ certbot_auto_renew_minute }}"
+    hour: "{{ certbot_auto_renew_hour }}"
+    user: "{{ certbot_auto_renew_user }}"
   when: certbot_auto_renew
 
-- name: reload services after certbot tasks
-  include_tasks: reload-services.yml
+- name: Reload services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: reloaded
+  loop: "{{ certbot_reload_services }}"
   when:
     - certbot_reload_services | length > 0
     - certbot_reload_services_after_enabled
